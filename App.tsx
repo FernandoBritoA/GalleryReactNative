@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App = () => (
   <NavigationContainer>
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name={routes.ImageGallery} component={ImageGallery} />
       <Stack.Screen name={routes.ImageDetail} component={ImageDetail} />
     </Stack.Navigator>
