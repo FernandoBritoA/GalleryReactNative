@@ -1,21 +1,29 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {getImagesByPage} from '../modules/unsplashAPI';
+import {ImageData} from '../types/ImageData';
 
-const useUnsplashGallery = () => {
+type ReturnT = {
+  loadNextPage: () => void;
+  images: ImageData[];
+};
+
+const useUnsplashGallery = (): ReturnT => {
+  const [page, setPage] = useState<number>(1);
+  const [images, setImages] = useState<ImageData[]>([]);
+
+  const loadNextPage = () => setPage(page + 1);
+
+  const getNewImages = async () => {
+    const newImages = await getImagesByPage(page);
+
+    setImages([...images, ...newImages]);
+  };
+
   useEffect(() => {
-    const fetch = async () => {
-      try {
-        const images = await getImagesByPage(1);
+    void getNewImages();
+  }, [page]);
 
-        console.log(images);
-      } catch (e) {
-        console.log('ERROR');
-        console.log(e);
-      }
-    };
-
-    void fetch();
-  }, []);
+  return {images, loadNextPage};
 };
 
 export default useUnsplashGallery;
